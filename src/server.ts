@@ -13,6 +13,7 @@ import newsRoutes from './routes/news.routes';
 import newsletterRoutes from './routes/newsletter.routes';
 import pipelineRoutes from './routes/pipeline.routes';
 import editorRoutes from './routes/editor.routes';
+import feedbackRoutes from './routes/feedback.routes';
 import path from 'path';
 import fs from 'fs';
 
@@ -25,7 +26,8 @@ app.use(helmet({
 }));
 const allowedOrigins = [
   env.FRONTEND_URL,
-  'https://ixnel-frontend.vercel.app'
+  'https://ixnel-frontend.vercel.app',
+  'http://localhost:5173'
 ];
 
 app.use(cors({
@@ -67,8 +69,9 @@ app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/news', newsRoutes);
 app.use('/api/newsletter', newsletterRoutes);
-app.use('/api/pipeline', pipelineRoutes);
+app.use('/api/jobs', pipelineRoutes);
 app.use('/api/editor', editorRoutes);
+app.use('/api/feedback', feedbackRoutes);
 
 // ─── Health Check ────────────────────────────────────────────────────────────
 app.get('/', (_req, res) => {
@@ -83,7 +86,7 @@ app.get('/api/health', (_req, res) => {
 app.use(errorHandler);
 
 // ─── Start Server ────────────────────────────────────────────────────────────
-const PORT = parseInt(env.PORT, 10);
+const PORT = parseInt(process.env.PORT || env.PORT, 10);
 
 const startServer = async () => {
   await connectDB();

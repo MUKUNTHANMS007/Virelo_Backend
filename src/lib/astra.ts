@@ -1,17 +1,9 @@
 import { DataAPIClient } from '@datastax/astra-db-ts';
-import dotenv from 'dotenv';
-import path from 'path';
+import { env } from '../config/env';
 
-// Load environment variables
-dotenv.config();
-
-const endpoint = process.env.ASTRA_DB_API_ENDPOINT || '';
-const token = process.env.ASTRA_DB_APPLICATION_TOKEN || '';
-const namespace = process.env.ASTRA_DB_NAMESPACE || 'default_keyspace';
-
-if (!endpoint || !token) {
-  console.error('Astra DB credentials missing in .env');
-}
+const endpoint = env.ASTRA_DB_API_ENDPOINT;
+const token = env.ASTRA_DB_APPLICATION_TOKEN;
+const namespace = env.ASTRA_DB_NAMESPACE;
 
 // Initialize the client 
 const client = new DataAPIClient(token);

@@ -15,7 +15,10 @@ export const errorHandler = (
   res: Response,
   _next: NextFunction
 ): void => {
-  console.error('Error Trace:', err);
+  console.error('Error Trace:', JSON.stringify(err, Object.getOwnPropertyNames(err), 2));
+  if ((err as any).rawResponse) {
+    console.error('AstraDB Raw Response:', JSON.stringify((err as any).rawResponse, null, 2));
+  }
 
   if (err instanceof AppError) {
     res.status(err.statusCode).json({

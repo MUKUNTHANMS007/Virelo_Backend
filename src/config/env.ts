@@ -4,10 +4,12 @@ import { z } from 'zod';
 dotenv.config();
 
 const envSchema = z.object({
-  DATABASE_URI: z.string().min(1, 'DATABASE_URI is required'),
+  ASTRA_DB_API_ENDPOINT: z.string().min(1, 'ASTRA_DB_API_ENDPOINT is required'),
+  ASTRA_DB_APPLICATION_TOKEN: z.string().min(1, 'ASTRA_DB_APPLICATION_TOKEN is required'),
+  ASTRA_DB_NAMESPACE: z.string().default('default_keyspace'),
   JWT_SECRET: z.string().min(1, 'JWT_SECRET is required'),
   PORT: z.string().default('5000'),
-  FRONTEND_URL: z.string().default('http://localhost:5173'),
+  FRONTEND_URL: z.string().default('https://ixnel-frontend.vercel.app'),
 });
 
 const parsed = envSchema.safeParse(process.env);
