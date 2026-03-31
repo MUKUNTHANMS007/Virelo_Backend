@@ -11,18 +11,37 @@ import authRoutes from './routes/auth.routes';
 import projectRoutes from './routes/project.routes';
 import newsRoutes from './routes/news.routes';
 import newsletterRoutes from './routes/newsletter.routes';
-import generationRoutes from './routes/generation.routes';
+import pipelineRoutes from './routes/pipeline.routes';
+import editorRoutes from './routes/editor.routes';
 import path from 'path';
 import fs from 'fs';
+
 
 const app = express();
 
 // ─── Security Middleware ─────────────────────────────────────────────────────
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: false,
+}));
+const allowedOrigins = [
+  env.FRONTEND_URL,
+  'https://ixnel-frontend.vercel.app'
+];
+
 app.use(cors({
-  origin: env.FRONTEND_URL,
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 }));
+
+
 
 // ─── Rate Limiting ───────────────────────────────────────────────────────────
 const limiter = rateLimit({
@@ -48,9 +67,14 @@ app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/news', newsRoutes);
 app.use('/api/newsletter', newsletterRoutes);
-app.use('/api/generations', generationRoutes);
+app.use('/api/pipeline', pipelineRoutes);
+app.use('/api/editor', editorRoutes);
 
 // ─── Health Check ────────────────────────────────────────────────────────────
+app.get('/', (_req, res) => {
+  res.send('<h1>TemporalAI API is LIVE</h1><p>Visit /api/health for details.</p>');
+});
+
 app.get('/api/health', (_req, res) => {
   res.status(200).json({ success: true, message: 'TemporalAI API is running' });
 });

@@ -15,7 +15,7 @@ export const errorHandler = (
   res: Response,
   _next: NextFunction
 ): void => {
-  console.error('Error:', err.message);
+  console.error('Error Trace:', err);
 
   if (err instanceof AppError) {
     res.status(err.statusCode).json({

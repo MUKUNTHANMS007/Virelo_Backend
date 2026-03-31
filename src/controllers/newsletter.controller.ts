@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { Newsletter } from '../models/Newsletter';
+import { astraDb } from '../lib/astra';
+
+const getNewsletterCollection = () => astraDb.collection('newsletter');
 
 export const subscribe = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
@@ -10,8 +12,10 @@ export const subscribe = async (req: Request, res: Response, next: NextFunction)
       return;
     }
 
+    const collection = getNewsletterCollection();
+
     // Check if already subscribed
-    const existing = await Newsletter.findOne({ email: email.toLowerCase() });
+    const existing = await collection.findOne({ email: email.toLowerCase() });
     if (existing) {
       res.status(200).json({
         success: true,
@@ -20,7 +24,10 @@ export const subscribe = async (req: Request, res: Response, next: NextFunction)
       return;
     }
 
-    await Newsletter.create({ email: email.toLowerCase() });
+    await collection.insertOne({ 
+      email: email.toLowerCase(),
+      subscribedAt: new Date().toISOString()
+    });
 
     res.status(201).json({
       success: true,

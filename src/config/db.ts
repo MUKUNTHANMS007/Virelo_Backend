@@ -1,12 +1,12 @@
-import mongoose from 'mongoose';
-import { env } from './env';
+import { astraDb } from '../lib/astra';
 
 export const connectDB = async (): Promise<void> => {
   try {
-    const conn = await mongoose.connect(env.DATABASE_URI);
-    console.log(`✅ MongoDB connected: ${conn.connection.host}`);
+    // Astra DB client is initialized in lib/astra.ts, but let's verify connectivity
+    const collections = await astraDb.listCollections();
+    console.log(`✅ Astra DB connected. Collections: ${collections.length}`);
   } catch (error) {
-    console.error('❌ MongoDB connection error:', error);
-    process.exit(1);
+    console.error('❌ Astra DB connection error:', error);
+    console.log('⚠️ Ensure ASTRA_DB_API_ENDPOINT and ASTRA_DB_APPLICATION_TOKEN are correct.');
   }
 };
