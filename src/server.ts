@@ -20,6 +20,9 @@ import fs from 'fs';
 
 const app = express();
 
+// ─── Trust Proxy for Render ─────────────────────────────────────────────────────
+app.set('trust proxy', 1);
+
 // ─── Security Middleware ─────────────────────────────────────────────────────
 app.use(helmet({
   crossOriginResourcePolicy: false,
