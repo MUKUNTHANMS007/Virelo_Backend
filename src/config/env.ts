@@ -10,6 +10,8 @@ const envSchema = z.object({
   JWT_SECRET: z.string().min(1, 'JWT_SECRET is required'),
   PORT: z.string().default('5000'),
   FRONTEND_URL: z.string().default('https://ixnel-frontend.vercel.app'),
+  RUNPOD_API_KEY: z.string().min(1, 'RUNPOD_API_KEY is required'),
+  RUNPOD_ENDPOINT_ID: z.string().min(1, 'RUNPOD_ENDPOINT_ID is required'),
 });
 
 const parsed = envSchema.safeParse(process.env);

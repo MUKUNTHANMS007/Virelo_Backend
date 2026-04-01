@@ -8,6 +8,8 @@ export interface IGeneration extends Document {
   status: 'pending' | 'processing' | 'completed' | 'failed';
   resultUrl?: string;
   psdUrl?: string;
+  runpodJobId?: string;
+  fileSize?: number; // in bytes
   fidelity?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -45,6 +47,13 @@ const generationSchema = new Schema<IGeneration>(
     },
     psdUrl: {
       type: String,
+    },
+    runpodJobId: {
+      type: String,
+    },
+    fileSize: {
+      type: Number,
+      default: 0,
     },
     fidelity: {
       type: String,

@@ -8,6 +8,7 @@ export interface IUser extends Document {
   role: 'user' | 'admin';
   plan: 'free' | 'pro';
   generationCount: number;
+  totalStorageUsed: number; // in bytes
   createdAt: Date;
   updatedAt: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
@@ -45,6 +46,10 @@ const userSchema = new Schema<IUser>(
       default: 'free',
     },
     generationCount: {
+      type: Number,
+      default: 0,
+    },
+    totalStorageUsed: {
       type: Number,
       default: 0,
     },
